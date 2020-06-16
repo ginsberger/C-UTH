@@ -24,7 +24,7 @@ void _ZN10Material_ts1DEP10Material_t(Material_t* material_t){
 /* PhysicalBox Defs */
 void _ZN11PhysicalBox1CEP11PhysicalBoxddd(PhysicalBox* physicalBox, double l, double w, double h)
 {
-    _ZN3Box1CEP3Boxddd(&physicalBox->box,l, w, h);
+    _ZN3Box1CEP3Boxddd((Box*)&physicalBox,l, w, h);
 
     Material_t mat2;
     Materials materials2;
@@ -37,7 +37,7 @@ void _ZN11PhysicalBox1CEP11PhysicalBoxddd(PhysicalBox* physicalBox, double l, do
 
 void _ZN11PhysicalBox1CEP11PhysicalBoxdddN9Materials5TypesE(PhysicalBox* physicalBox, double l, double w, double h, Types t)
 {
-    _ZN3Box1CEP3Boxddd(&physicalBox->box,l, w, h);
+    _ZN3Box1CEP3Boxddd((Box*)&physicalBox,l, w, h);
 
     Material_t mat2;
     _ZN9Materials1CEP9Materials(&mat2.materials);
@@ -50,7 +50,7 @@ void _ZN11PhysicalBox1CEP11PhysicalBoxdddN9Materials5TypesE(PhysicalBox* physica
 
 void _ZN11PhysicalBox1CEN9Materials5TypesE(PhysicalBox* physicalBox, Types t)
 {
-    _ZN3Box1CEP3Boxd(&physicalBox->box, 1);
+    _ZN3Box1CEP3Boxd((Box*)&physicalBox, 1);
 
     Material_t mat2;
     Materials materials2;
@@ -65,25 +65,25 @@ void _ZN11PhysicalBox1CEN9Materials5TypesE(PhysicalBox* physicalBox, Types t)
 void _ZNK11PhysicalBox6printpEPK11PhysicalBox(const PhysicalBox*const physicalBox)
 {
     printf("PhysicalBox, made of %s; ", names[physicalBox->material.material]);
-    _ZNKBox5printEP3Box(&physicalBox->box);
+    _ZNKBox5printEP3Box((Box*)&physicalBox);
 }
 
 void _ZN11PhysicalBox1DEP11PhysicalBox(PhysicalBox* physicalBox)
 {
     printf("PhysicalBox dtor, %f x %f x %f, %s; ", physicalBox->box.length, physicalBox->box.height, physicalBox->box.width, names[physicalBox->material.material]);
     _ZN10Material_ts1DEP10Material_t(&physicalBox->material);
-    _ZN3Box1DEP3Box(&physicalBox->box);
+    _ZN3Box1DEP3Box((Box*)&physicalBox);
 }
 
 void _ZN11PhysicalBox1CEP11PhysicalBoxPK11PhysicalBox(PhysicalBox* physicalBox, const PhysicalBox*const physicalBox1)
 {
-    _ZN3Box1CEP3Boxd(&physicalBox->box, 1);
+    _ZN3Box1CEP3Boxd((Box*)&physicalBox, 1);
     physicalBox->material = physicalBox1->material;
 }
 
 void _ZN11PhysicalBox18AssignmentOperatorEP11PhysicalBoxPK11PhysicalBox(PhysicalBox* physicalBox, const PhysicalBox*const physicalBox1)
 {
-    _ZN3Box18AssignmentOperatorEP3BoxP3Box(&physicalBox->box, &physicalBox1->box);
+    _ZN3Box18AssignmentOperatorEP3BoxP3Box((Box*)&physicalBox, (Box*)&physicalBox1);
     physicalBox->material = physicalBox1->material;
 }
 

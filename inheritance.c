@@ -10,7 +10,7 @@ void  _Z11doMaterialsv()
     Materials mat;
     _ZN9Materials1CEP9Materials(&mat);
 
-    printf("Size of Materials: %lu\n", sizeof(Materials));
+    printf("Size of Materials: %lu\n", sizeof(Materials)+1);
     printf("Size of mat: %lu\n", sizeof(mat));
     printf("Size of Materials::Types: %lu\n", sizeof(Types));
     printf("Size of Material_t: %lu\n", sizeof(Material_t));
