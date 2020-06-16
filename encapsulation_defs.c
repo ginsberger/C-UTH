@@ -1,17 +1,10 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include "c2c_encapsulation_defs.h"
+#include "encapsulation_defs.h"
 const char* _Z5Shelf7messagev = "The total volume held on the shelf is";
 
 
 
-void _ZN3Box1CEP3Box(Box* box)
-{
-    box->length = 1;
-    box->height = 1;
-    box->width = 1;
-    _ZNKBox5printEP3Box(box);
-}
 
 void _ZN3Box1CEP3Boxd(Box* box, double dim)
 {
@@ -75,9 +68,10 @@ void _ZN5Shelf1CEP5Shelf(Shelf* shelf)
     size_t i = 0;
     for(;i<3;i++)
     {
-        _ZN3Box1CEP3Box(&shelf->boxes[i]);
+        _ZN3Box1CEP3Boxd(&shelf->boxes[i],1);
     }
 }
+
 void _ZN5Shelf1DEP5Shelf(Shelf* shelf)
 {
     int i;

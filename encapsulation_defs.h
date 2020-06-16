@@ -11,7 +11,6 @@ typedef struct Box {
 
 
 
-void _ZN3Box1CEP3Box(Box* box);
 void _ZN3Box1CEP3Boxd(Box* box, double dim);
 void _ZN3Box1CEP3Boxddd(Box* box,double l, double w, double h);
 void _ZN3Box1CEP3BoxP3Box(Box* box,const Box*const other);/*copy constractor*/
