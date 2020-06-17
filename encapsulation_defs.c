@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "encapsulation_defs.h"
 const char* _Z5Shelf7messagev = "The total volume held on the shelf is";
 
@@ -31,12 +32,12 @@ void _ZN3Box1initEP3BoxP3Box(Box* box,const Box*const other)
 
 void _ZN3Box1CEP3BoxP3Box(Box* box,const Box*const other)
 {
-    _ZN3Box1initEP3BoxP3Box(box, other);
+    memcpy(box,other, sizeof(Box));
 }
 
 Box* _ZN3Box18AssignmentOperatorEP3BoxP3Box(Box* box,const Box*const other)
 {
-    _ZN3Box1initEP3BoxP3Box(box, other);
+    memcpy(box,other, sizeof(Box));
     return box;
 }
 
