@@ -6,6 +6,7 @@ const char* const names[] = { "Plastic", "Metal", "Wood", "Paper", "Other" };
 
 
 /* Materials Defs */
+
 void _ZN9Materials1CEP9Materials(Materials* materials){}
 
 void _ZN9Materials1CEP9MaterialsPK9Materials(Materials* materials, const Materials*const other)
@@ -59,9 +60,6 @@ void _ZN11PhysicalBox1CEP11PhysicalBoxdddN9Materials5TypesE(PhysicalBox* physica
     _ZN3Box1CEP3Boxddd((Box*)physicalBox,l, w, h);
 
     physicalBox->material.material = t;
-/*    Material_t mat2;
-    _ZN9Materials1CEP9Materials(&mat2.materials);
-    mat2.material = t;*/
 
     printf("Material created, set to %s\n", names[physicalBox->material.material]);
 

@@ -107,7 +107,6 @@ void _Z11doWeightBoxv()
 
 
 
-
 int main()
 {
     printf("\n--- Start main() ---\n\n");

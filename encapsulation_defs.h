@@ -3,6 +3,8 @@
 #define UNDERTHEHOODCC_CPP2C_ENCAPSULATION_DEFS_H
 extern const char* _Z5Shelf7messagev;
 
+/* Box */
+
 typedef struct Box {
         double length;
         double width;
@@ -20,6 +22,9 @@ Box* _ZNBox2mLEP3Boxd(Box* box, double mult);
 void _ZNKBox5printEP3Box(const Box*const box);
 
 
+
+
+/* Shelf */
 
 typedef struct Shelf{
     Box boxes[3];

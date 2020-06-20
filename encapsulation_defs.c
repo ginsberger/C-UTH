@@ -5,7 +5,7 @@
 const char* _Z5Shelf7messagev = "The total volume held on the shelf is";
 
 
-
+/* Box defs */
 
 void _ZN3Box1CEP3Boxd(Box* box, double dim)
 {
@@ -23,13 +23,6 @@ void _ZN3Box1CEP3Boxddd(Box* box,double l, double w, double h)
     _ZNKBox5printEP3Box(box);
 }
 
-void _ZN3Box1initEP3BoxP3Box(Box* box,const Box*const other)
-{
-    box->length = other->length;
-    box->width = other->width;
-    box->height = other->height;
-}
-
 void _ZN3Box1CEP3BoxP3Box(Box* box,const Box*const other)
 {
     memcpy(box,other, sizeof(Box));
@@ -41,12 +34,10 @@ Box* _ZN3Box18AssignmentOperatorEP3BoxP3Box(Box* box,const Box*const other)
     return box;
 }
 
-
 void _ZN3Box1DEP3Box(Box* box)
 {
     printf("Box destructor, %f x %f x %f\n", box->width, box->height, box->length);
 }
-
 
 Box* _ZNBox2mLEP3Boxd(Box* box, double mult)
 {
@@ -63,6 +54,8 @@ void _ZNKBox5printEP3Box(const Box*const box)
 
 
 
+
+/* Shelf defs */
 
 void _ZN5Shelf1CEP5Shelf(Shelf* shelf)
 {
@@ -81,6 +74,7 @@ void _ZN5Shelf1DEP5Shelf(Shelf* shelf)
         _ZN3Box1DEP3Box(&shelf->boxes[i]);
     }
 }
+
 void _ZN5Shelf6setBoxEP5ShelfiP3Box(Shelf* shelf, int index, const Box* dims)
 {
     _ZN3Box18AssignmentOperatorEP3BoxP3Box(&shelf->boxes[index],dims);
