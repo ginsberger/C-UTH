@@ -26,18 +26,56 @@ void doPrePostDollarFixer()
     _ZNK18PrePostDollarFixer5printEPK18PrePostDollarFixerdc(&asterisks, 3.14f, '$');
 
     printf("\n--- end doPrePostDollarFixer() ---\n\n");
+    _ZN12PrePostFixer1DEP12PrePostFixer(&asterisks);
 }
+
+void doPrePostFloatDollarFixer()
+{
+    printf("\n--- start doPrePostFloatDollarFixer() ---\n\n");
+
+    PrePostFloatDollarFixer hashes;
+    _ZN23PrePostFloatDollarFixer1CEP23PrePostFloatDollarFixerPKcPKc(&hashes, "### ", " ###");
+    _ZNK23PrePostFloatDollarFixer5printEPK23PrePostFloatDollarFixerf(&hashes, -777);
+    _ZNK23PrePostFloatDollarFixer5printEPK23PrePostFloatDollarFixerfc(&hashes, 350, '#');
+    _ZNK23PrePostFloatDollarFixer5printEPK23PrePostFloatDollarFixerf(&hashes, 3.14f);
+
+    PrePostDollarFixer hashes2;
+    _ZN18PrePostDollarFixer1CEP18PrePostDollarFixerPK18PrePostDollarFixer(&hashes2, (PrePostDollarFixer*)&hashes);
+    _ZNK18PrePostDollarFixer5printEPK18PrePostDollarFixerdc(&hashes2, 7.5, '$');
+    _ZNK18PrePostDollarFixer5printEPK18PrePostDollarFixeric(&hashes2, 100, '$');
+
+    printf("\n--- start doPrePostFloatDollarFixer() ---\n\n");
+}
+
+void doPrePostChecker()
+{
+    printf("\n--- start doPrePostChecker() ---\n\n");
+
+    PrePostChecker check;
+    _ZN14PrePostChecker1CEP14PrePostChecker(&check);
+    _ZNK14PrePostChecker24printThisSymbolUsingFuncEPK14PrePostChecker(&check);
+    _ZNK14PrePostChecker23printThisSymbolDirectlyEPK14PrePostChecker(&check);
+    _ZNK14PrePostChecker31printDollarSymbolByCastDirectlyEPK14PrePostChecker(&check);
+    _ZNK14PrePostChecker32printDollarSymbolByScopeDirectlyEPK14PrePostChecker(&check);
+    _ZNK14PrePostChecker32printDollarSymbolByCastUsingFuncEPK14PrePostChecker(&check);
+    _ZNK14PrePostChecker33printDollarSymbolByScopeUsingFuncEPK14PrePostChecker(&check);
+
+    printf("\n--- end doPrePostChecker() ---\n\n");
+    _ZN14PrePostChecker1DEP14PrePostChecker(&check);
+}
+
+
 
 int main()
 {
     printf("\n--- Start main() ---\n\n");
 
-    doPrePostFixer();
+/*    doPrePostFixer();
     doPrePostDollarFixer();
-/*    doPrePostFloatDollarFixer();
+    doPrePostFloatDollarFixer();*/
     doPrePostChecker();
 
-    PrePostHashFixer hfix;
+/*    PrePostHashFixer hfix;
     runAsPrePostFixerRef(hfix);
     runAsPrePostDollarFixerRef(hfix);
     runAsPrePostDollarFixerObj(hfix);

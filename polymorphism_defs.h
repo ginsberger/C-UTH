@@ -12,7 +12,7 @@ typedef struct TextFormatter
 }TextFormatter;
 
 void _ZN13TextFormatterC1EP13TextFormatter(TextFormatter* this);
-void _ZN20DefaultTextFormatterD1EP13TextFormatter(void* this);
+void _ZN13TextFormatter1DEP13TextFormatter(void* this);
 
 
 
@@ -68,6 +68,59 @@ void _ZNK18PrePostDollarFixer5printEPK18PrePostDollarFixeric(const PrePostDollar
 void _ZNK18PrePostDollarFixer5printEPK18PrePostDollarFixerlc(const void *const this, long num, char symbol);
 void _ZNK18PrePostDollarFixer5printEPK18PrePostDollarFixerdc(const PrePostDollarFixer*const this, double num, char symbol);
 char _ZNK18PrePostDollarFixer16getDefaultSymbolEPK18PrePostDollarFixer(const void *const this);
+
+
+
+
+/* PrePostHashFixer */
+
+typedef struct PrePostHashFixer
+{
+    PrePostDollarFixer* prePostDollarFixer;
+    int precision;
+}PrePostHashFixer;
+
+void _ZN16PrePostHashFixer1CEP16PrePostHashFixeri(PrePostHashFixer* prePostHashFixer, int prc);/*prc=4*/
+void _ZN16PrePostHashFixer1DEP16PrePostHashFixer(void * this);
+void _ZNK16PrePostHashFixer5printEPK16PrePostHashFixeric(const PrePostHashFixer*const this, int num, char symbol);
+void _ZNK16PrePostHashFixer5printEPK16PrePostHashFixerlc(const void *const this, long num, char symbol);
+char _ZNK16PrePostHashFixer16getDefaultSymbolEPK16PrePostHashFixer(const void *const this);
+
+
+
+
+
+/* PrePostFloatDollarFixer */
+
+typedef struct PrePostFloatDollarFixer
+{
+    PrePostDollarFixer* prePostDollarFixer;
+}PrePostFloatDollarFixer;
+
+void _ZN23PrePostFloatDollarFixer1CEP23PrePostFloatDollarFixerPKcPKc(PrePostFloatDollarFixer* this, const char* prefix, const char* postfix);
+void _ZN23PrePostFloatDollarFixer1DEP23PrePostFloatDollarFixer(void* this);
+void _ZNK23PrePostFloatDollarFixer5printEPK23PrePostFloatDollarFixerf(const PrePostFloatDollarFixer*const this, float num);
+void _ZNK23PrePostFloatDollarFixer5printEPK23PrePostFloatDollarFixerfc(const PrePostFloatDollarFixer*const this, float num, char symbol);
+char _ZNK23PrePostFloatDollarFixer16getDefaultSymbolEPK23PrePostFloatDollarFixer(const void *const this);
+
+
+
+
+
+/* PrePostChecker */
+typedef struct PrePostChecker
+{
+    PrePostFloatDollarFixer* prePostFloatDollarFixer;
+}PrePostChecker;
+
+void _ZN14PrePostChecker1CEP14PrePostChecker(PrePostChecker* this);
+void _ZN14PrePostChecker1DEP14PrePostChecker(void* this);
+void _ZNK14PrePostChecker24printThisSymbolUsingFuncEPK14PrePostChecker(const PrePostChecker*const this);
+void _ZNK14PrePostChecker23printThisSymbolDirectlyEPK14PrePostChecker(const PrePostChecker*const this);
+void _ZNK14PrePostChecker32printDollarSymbolByCastUsingFuncEPK14PrePostChecker(const PrePostChecker*const this);
+void _ZNK14PrePostChecker33printDollarSymbolByScopeUsingFuncEPK14PrePostChecker(const PrePostChecker*const this);
+void _ZNK14PrePostChecker31printDollarSymbolByCastDirectlyEPK14PrePostChecker(const PrePostChecker*const this);
+void _ZNK14PrePostChecker32printDollarSymbolByScopeDirectlyEPK14PrePostChecker(const PrePostChecker*const this);
 
 
 
