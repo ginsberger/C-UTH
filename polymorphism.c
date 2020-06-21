@@ -12,17 +12,29 @@ void doPrePostFixer()
     _ZNK12PrePostFixer5printEPK12PrePostFixerlc(&angleBrackets, (long int)3.14, '\0');
 
     printf("\n--- end doPrePostFixer() ---\n\n");
+    _ZN12PrePostFixer1DEP12PrePostFixer(&angleBrackets);
 }
 
+void doPrePostDollarFixer()
+{
+    printf("\n--- start doPrePostDollarFixer() ---\n\n");
+    PrePostDollarFixer asterisks;
+    _ZN18PrePostDollarFixer1CEP18PrePostDollarFixerPKcPKc(&asterisks, "***** ", " *****");
 
+    _ZNK18PrePostDollarFixer5printEPK18PrePostDollarFixeric(&asterisks, -777, '$');
+    _ZNK18PrePostDollarFixer5printEPK18PrePostDollarFixeric(&asterisks, 350, '#');
+    _ZNK18PrePostDollarFixer5printEPK18PrePostDollarFixerdc(&asterisks, 3.14f, '$');
+
+    printf("\n--- end doPrePostDollarFixer() ---\n\n");
+}
 
 int main()
 {
     printf("\n--- Start main() ---\n\n");
 
     doPrePostFixer();
-/*    doPrePostDollarFixer();
-    doPrePostFloatDollarFixer();
+    doPrePostDollarFixer();
+/*    doPrePostFloatDollarFixer();
     doPrePostChecker();
 
     PrePostHashFixer hfix;
