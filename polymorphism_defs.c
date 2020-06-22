@@ -3,11 +3,41 @@
 #include <stdlib.h>
 #include <string.h> /*memcpy*/
 
+int m_next_id = 0;
+
+genericFunctionPointer VtableTextFormatter[] = {(genericFunctionPointer) _ZN13TextFormatter1DEP13TextFormatter, NULL};
+genericFunctionPointer VtableDefaultTextFormatter[] = {(genericFunctionPointer) _ZN20DefaultTextFormatter1DEP20DefaultTextFormatter,
+                                                       (genericFunctionPointer) _ZNK20DefaultTextFormatter5printEPK20DefaultTextFormatterPKc};
+genericFunctionPointer VtablePrePostFixer[] = {(genericFunctionPointer) _ZN12PrePostFixer1DEP12PrePostFixer,
+                                               (genericFunctionPointer) _ZNK12PrePostFixer5printEPK12PrePostFixerPKc,
+                                               (genericFunctionPointer) _ZNK12PrePostFixer5printEPK12PrePostFixerlc,
+                                               (genericFunctionPointer) _ZNK12PrePostFixer16getDefaultSymbolEPK12PrePostFixer};
+genericFunctionPointer VtablePrePostDollarFixer[] = {(genericFunctionPointer) _ZN18PrePostDollarFixer1DEP18PrePostDollarFixer,
+                                                     (genericFunctionPointer) _ZNK12PrePostFixer5printEPK12PrePostFixerPKc,
+                                                     (genericFunctionPointer) _ZNK18PrePostDollarFixer5printEPK18PrePostDollarFixerlc,
+                                                     (genericFunctionPointer) _ZNK18PrePostDollarFixer16getDefaultSymbolEPK18PrePostDollarFixer};
+genericFunctionPointer VtablePrePostHashFixer[] = {(genericFunctionPointer) _ZN16PrePostHashFixer1DEP16PrePostHashFixer,
+                                                   (genericFunctionPointer) _ZNK12PrePostFixer5printEPK12PrePostFixerPKc,
+                                                   (genericFunctionPointer) _ZNK16PrePostHashFixer5printEPK16PrePostHashFixerlc,
+                                                   (genericFunctionPointer) _ZNK16PrePostHashFixer16getDefaultSymbolEPK16PrePostHashFixer};
+genericFunctionPointer VtablePrePostFloatDollarFixer[] = {(genericFunctionPointer) _ZN16PrePostHashFixer1DEP16PrePostHashFixer,
+                                                          (genericFunctionPointer) _ZNK12PrePostFixer5printEPK12PrePostFixerPKc,
+                                                          (genericFunctionPointer) _ZNK16PrePostHashFixer5printEPK16PrePostHashFixerlc,
+                                                          (genericFunctionPointer) _ZNK23PrePostFloatDollarFixer16getDefaultSymbolEPK23PrePostFloatDollarFixer};
+genericFunctionPointer VtablePrePostChecker[] = {(genericFunctionPointer) _ZN14PrePostChecker1DEP14PrePostChecker,
+                                                 (genericFunctionPointer) _ZNK12PrePostFixer5printEPK12PrePostFixerPKc,
+                                                 (genericFunctionPointer) _ZNK16PrePostHashFixer5printEPK16PrePostHashFixerlc,
+                                                 (genericFunctionPointer) _ZNK23PrePostFloatDollarFixer16getDefaultSymbolEPK23PrePostFloatDollarFixer};
+genericFunctionPointer VtableMultiplier[] = {(genericFunctionPointer) _ZN10MultiplierD1EP10Multiplier,
+                                             (genericFunctionPointer) _ZNK10Multiplier5printEP10MultiplierPKc,
+                                             (genericFunctionPointer) _ZNK16PrePostHashFixer5printEPK16PrePostHashFixerlc,
+                                             (genericFunctionPointer) _ZNK23PrePostFloatDollarFixer16getDefaultSymbolEPK23PrePostFloatDollarFixer};
+
+
+
 
 
 /* TextFormatter defs */
-
-void *(*VtableTextFormatter[])(void*) = {(void *(*)(void *)) _ZN13TextFormatter1DEP13TextFormatter, NULL};
 
 void _ZN13TextFormatter1DEP13TextFormatter(void * this)
 {
@@ -16,7 +46,7 @@ void _ZN13TextFormatter1DEP13TextFormatter(void * this)
 
 void _ZN13TextFormatterC1EP13TextFormatter(TextFormatter* this)
 {
-    this->pVtable = VtableTextFormatter;
+    this->vPtr = VtableTextFormatter;
 }
 
 
@@ -24,15 +54,11 @@ void _ZN13TextFormatterC1EP13TextFormatter(TextFormatter* this)
 
 /* DefaultTextFormatter defs*/
 
-void *(*VtableDefaultTextFormatter[])(void*) = {(void *(*)(void *)) _ZN20DefaultTextFormatter1DEP20DefaultTextFormatter,
-                                                (void *(*)(void *)) _ZNK20DefaultTextFormatter5printEPK20DefaultTextFormatterPKc};
-
-int m_next_id = 0;
 void _ZN20DefaultTextFormatter1CEP20DefaultTextFormatter(DefaultTextFormatter* this)
 {
     _ZN13TextFormatterC1EP13TextFormatter((TextFormatter*)this);/*inline*/
     this->m_id = m_next_id++;
-    ((TextFormatter*)this)->pVtable = VtableDefaultTextFormatter;
+    ((TextFormatter*)this)->vPtr = VtableDefaultTextFormatter;
     printf("--- DefaultTextFormatter Default CTOR\n########## C %d ##########\n", this->m_id);
 }
 
@@ -40,7 +66,7 @@ void _ZN20DefaultTextFormatter1CEP20DefaultTextFormatterPK20DefaultTextFormatter
 {
     _ZN13TextFormatterC1EP13TextFormatter((TextFormatter*)this);
     this->m_id = m_next_id++;
-    ((TextFormatter*)this)->pVtable = VtableDefaultTextFormatter;
+    ((TextFormatter*)this)->vPtr = VtableDefaultTextFormatter;
     printf("--- DefaultTextFormatter Copy CTOR, from id: %d\n########## C %d ##########\n", other->m_id, this->m_id);
 }
 
@@ -54,8 +80,8 @@ void _ZN20DefaultTextFormatter1DEP20DefaultTextFormatter(void * this)
 {
     DefaultTextFormatter* defaultTextFormatter = (DefaultTextFormatter*)this;
     printf("--- DefaultTextFormatter DTOR\n########## D %d ##########\n", defaultTextFormatter->m_id);
-    ((TextFormatter*)defaultTextFormatter)->pVtable = VtableTextFormatter;
-    (((TextFormatter*)this)->pVtable[E_Dtor])((void*)this);
+    ((TextFormatter*)defaultTextFormatter)->vPtr = VtableTextFormatter;
+    (((TextFormatter*)this)->vPtr[E_Dtor])((void*)this);
 }
 
 void _ZNK20DefaultTextFormatter5printEPK20DefaultTextFormatterPKc(const void *const this, const char* text)
@@ -81,36 +107,36 @@ DefaultTextFormatter* _Z22generateFormatterArrayv()
 
 /* PrePostFixer Defs */
 
-void *(*VtablePrePostFixer[])(void*) = {(void *(*)(void *)) _ZN12PrePostFixer1DEP12PrePostFixer,
-                                        (void *(*)(void *)) _ZNK12PrePostFixer5printEPK12PrePostFixerPKc,
-                                        (void *(*)(void *)) _ZNK12PrePostFixer5printEPK12PrePostFixerlc,
-                                        (void *(*)(void *)) _ZNK12PrePostFixer16getDefaultSymbolEPK12PrePostFixer};
-
 void _ZN12PrePostFixer1CEP12PrePostFixerPKcPKc(PrePostFixer* this, const char* prefix, const char* postfix)
 {
     _ZN20DefaultTextFormatter1CEP20DefaultTextFormatter((DefaultTextFormatter*)this);
     this->m_pre = prefix;
     this->m_post = postfix;
-    ((TextFormatter*)this)->pVtable = VtableTextFormatter;
+    ((TextFormatter*)this)->vPtr = VtableTextFormatter;
     printf("--- PrePostFixer CTOR: \"%s\"...\"%s\"\n", this->m_pre, this->m_post);
 }
 
 void _ZN12PrePostFixer1CEP12PrePostFixerPK12PrePostFixer(PrePostFixer* this, const PrePostFixer*const other)
 {
     _ZN20DefaultTextFormatter1CEP20DefaultTextFormatterPK20DefaultTextFormatter((DefaultTextFormatter*)this, (DefaultTextFormatter*)other);
-    ((TextFormatter*)this)->pVtable = VtableTextFormatter;
-    memcpy(this + sizeof(DefaultTextFormatter), other + sizeof(DefaultTextFormatter), sizeof(PrePostFixer) - sizeof(DefaultTextFormatter));
+    ((TextFormatter*)this)->vPtr = VtableTextFormatter;
+/*    memcpy(this + sizeof(DefaultTextFormatter), other + sizeof(DefaultTextFormatter), sizeof(PrePostFixer) - sizeof(DefaultTextFormatter));*/
+    this->m_post = other->m_post;
+    this->m_pre = other->m_pre;
 }
 
 void _ZN12PrePostFixer1DEP12PrePostFixer(void* this)
 {
+    TextFormatter *temp;
+    genericFunctionPointer *temp2 = VtableDefaultTextFormatter;
     PrePostFixer* postFixer = (PrePostFixer*)this;
     printf("--- PrePostFixer DTOR: \"%s\"...\"%s\"\n", postFixer->m_pre, postFixer->m_post);
 
-    ((TextFormatter*)postFixer)->pVtable = VtableDefaultTextFormatter;
-    printf("\n------------- sizeof postFixer pVtable=%ld, sizeof VtableDefaultTextFormatter=%ld\n",sizeof( ((TextFormatter*)postFixer)->pVtable), sizeof(VtableDefaultTextFormatter));
+    temp = (TextFormatter*)postFixer;
+    ((TextFormatter*)postFixer)->vPtr = VtableDefaultTextFormatter;
+    printf("\n------------- sizeof postFixer vPtr=%ld, sizeof VtableDefaultTextFormatter=%ld\n", sizeof( ((TextFormatter*)postFixer)->vPtr), sizeof(VtableDefaultTextFormatter));
     printf("sizeof vtable[0] = %ld\n", sizeof(VtableDefaultTextFormatter[0]));
-    (((TextFormatter*)postFixer)->pVtable[E_Dtor])(postFixer);
+    (((TextFormatter*)postFixer)->vPtr[E_Dtor])(postFixer);
 }
 
 void _ZNK12PrePostFixer5printEPK12PrePostFixerPKc(const void *const this, const char* text)
@@ -150,22 +176,17 @@ char _ZNK12PrePostFixer16getDefaultSymbolEPK12PrePostFixer(const void *const thi
 
 /* PrePostDollarFixer Defs */
 
-void *(*VtablePrePostDollarFixer[])(void*) = {(void *(*)(void *)) _ZN18PrePostDollarFixer1DEP18PrePostDollarFixer,
-                                        (void *(*)(void *)) _ZNK12PrePostFixer5printEPK12PrePostFixerPKc,
-                                        (void *(*)(void *)) _ZNK18PrePostDollarFixer5printEPK18PrePostDollarFixerlc,
-                                        (void *(*)(void *)) _ZNK18PrePostDollarFixer16getDefaultSymbolEPK18PrePostDollarFixer};
-
-
 void _ZN18PrePostDollarFixer1CEP18PrePostDollarFixerPKcPKc(PrePostDollarFixer* this, const char* prefix, const char* postfix)
 {
     _ZN12PrePostFixer1CEP12PrePostFixerPKcPKc((PrePostFixer*)this, prefix, postfix);
-    ((TextFormatter*)this)->pVtable = VtablePrePostDollarFixer;
+    ((TextFormatter*)this)->vPtr = VtablePrePostDollarFixer;
     printf("--- PrePostDollarFixer CTOR: \"%s\"...\"%s\"\n", ((PrePostFixer*)this)->m_pre, ((PrePostFixer*)this)->m_post);
 }
 
 void _ZN18PrePostDollarFixer1CEP18PrePostDollarFixerPK18PrePostDollarFixer(PrePostDollarFixer* this, const PrePostDollarFixer*const other)
 {
     _ZN12PrePostFixer1CEP12PrePostFixerPK12PrePostFixer((PrePostFixer*)this, (PrePostFixer*)other);
+    ((TextFormatter*)this)->vPtr = VtablePrePostDollarFixer;
     printf("--- PrePostDollarFixer Copy CTOR: \"%s\"...\"%s\"\n", ((PrePostFixer*)this)->m_pre, ((PrePostFixer*)this)->m_post);
 }
 
@@ -173,15 +194,15 @@ void _ZN18PrePostDollarFixer1DEP18PrePostDollarFixer(void * this)
 {
     PrePostDollarFixer* prePostDollarFixer = (PrePostDollarFixer*)this;
     printf("--- PrePostDollarFixer DTOR: \"%s\"...\"%s\"\n", ((PrePostFixer*)this)->m_pre, ((PrePostFixer*)this)->m_post);
-    ((TextFormatter*)prePostDollarFixer)->pVtable = VtablePrePostFixer;
-    (((TextFormatter*)this)->pVtable[E_Dtor])(this);
+    ((TextFormatter*)prePostDollarFixer)->vPtr = VtablePrePostFixer;
+    (((TextFormatter*)this)->vPtr[E_Dtor])(this);
 }
 
 void _ZNK18PrePostDollarFixer5printEPK18PrePostDollarFixeric(const PrePostDollarFixer*const this, int num, char symbol)
 {
     printf("%-60s | ", "[PrePostDollarFixer::print(int, char)]");
     printf("-->\n");
-    ((print)(((TextFormatter*)this)->pVtable[E_printlc]))((void*)this,num,symbol);
+    ((print)(((TextFormatter*)this)->vPtr[E_printlc]))((void*)this, num, symbol);
 }
 
 void _ZNK18PrePostDollarFixer5printEPK18PrePostDollarFixerlc(const void *const this, long num, char symbol)
@@ -209,16 +230,11 @@ char _ZNK18PrePostDollarFixer16getDefaultSymbolEPK18PrePostDollarFixer(const voi
 
 /* PrePostHashFixer Defs */
 
-void *(*VtablePrePostHashFixer[])(void*) = {(void *(*)(void *)) _ZN16PrePostHashFixer1DEP16PrePostHashFixer,
-                                              (void *(*)(void *)) _ZNK12PrePostFixer5printEPK12PrePostFixerPKc,
-                                              (void *(*)(void *)) _ZNK16PrePostHashFixer5printEPK16PrePostHashFixerlc,
-                                              (void *(*)(void *)) _ZNK16PrePostHashFixer16getDefaultSymbolEPK16PrePostHashFixer};
-
 void _ZN16PrePostHashFixer1CEP16PrePostHashFixeri(PrePostHashFixer* this, int prc)
 {
     _ZN18PrePostDollarFixer1CEP18PrePostDollarFixerPKcPKc((PrePostDollarFixer*)this, "===> ", " <===");
     this->precision = prc;
-    ((TextFormatter*)this)->pVtable = VtablePrePostHashFixer;
+    ((TextFormatter*)this)->vPtr = VtablePrePostHashFixer;
     printf("--- PrePostHashFixer CTOR: \"%s\"...\"%s\", precision: %d\n", ((PrePostFixer*)this)->m_pre, ((PrePostFixer*)this)->m_post, this->precision);
 
     printf("%-60s | ", "[PrePostHashFixer::print(double, char)]");
@@ -229,8 +245,8 @@ void _ZN16PrePostHashFixer1DEP16PrePostHashFixer(void * this)
 {
     PrePostHashFixer* prePostHashFixer = (PrePostHashFixer*)this;
     printf("--- PrePostHashFixer DTOR: \"%s\"...\"%s\"\n",  ((PrePostFixer*)this)->m_pre, ((PrePostFixer*)this)->m_post);
-    ((TextFormatter*)prePostHashFixer)->pVtable = VtablePrePostDollarFixer;
-    (((TextFormatter*)this)->pVtable[E_Dtor])((void*)this);
+    ((TextFormatter*)prePostHashFixer)->vPtr = VtablePrePostDollarFixer;
+    (((TextFormatter*)this)->vPtr[E_Dtor])((void*)this);
 }
 
 void _ZNK16PrePostHashFixer5printEPK16PrePostHashFixeric(const PrePostHashFixer*const this, int num, char symbol)
@@ -264,15 +280,10 @@ char _ZNK16PrePostHashFixer16getDefaultSymbolEPK16PrePostHashFixer(const void *c
 
 /* PrePostFloatDollarFixer Defs */
 
-void *(*VtablePrePostFloatDollarFixer[])(void*) = {(void *(*)(void *)) _ZN16PrePostHashFixer1DEP16PrePostHashFixer,
-                                                   (void *(*)(void *)) _ZNK12PrePostFixer5printEPK12PrePostFixerPKc,
-                                                   (void *(*)(void *)) _ZNK16PrePostHashFixer5printEPK16PrePostHashFixerlc,
-                                                   (void *(*)(void *)) _ZNK23PrePostFloatDollarFixer16getDefaultSymbolEPK23PrePostFloatDollarFixer};
-
 void _ZN23PrePostFloatDollarFixer1CEP23PrePostFloatDollarFixerPKcPKc(PrePostFloatDollarFixer* this, const char* prefix, const char* postfix)
 {
     _ZN18PrePostDollarFixer1CEP18PrePostDollarFixerPKcPKc((PrePostDollarFixer*)this, prefix, postfix);
-    ((TextFormatter*)this)->pVtable = VtablePrePostFloatDollarFixer;
+    ((TextFormatter*)this)->vPtr = VtablePrePostFloatDollarFixer;
     printf("--- PrePostFloatDollarFixer CTOR: \"%s\"...\"%s\"\n", ((PrePostFixer*)this)->m_pre, ((PrePostFixer*)this)->m_post);
 }
 
@@ -280,8 +291,8 @@ void _ZN23PrePostFloatDollarFixer1DEP23PrePostFloatDollarFixer(void * this)
 {
     PrePostFloatDollarFixer* prePostFloatDollarFixer = (PrePostFloatDollarFixer*)this;
     printf("--- PrePostHashFixer DTOR: \"%s\"...\"%s\"\n",  ((PrePostFixer*)this)->m_pre, ((PrePostFixer*)this)->m_post);
-    ((TextFormatter*)prePostFloatDollarFixer)->pVtable = VtablePrePostDollarFixer;
-    (((TextFormatter*)this)->pVtable[E_Dtor])((void*)this);
+    ((TextFormatter*)prePostFloatDollarFixer)->vPtr = VtablePrePostDollarFixer;
+    (((TextFormatter*)this)->vPtr[E_Dtor])((void*)this);
 }
 
 void _ZNK23PrePostFloatDollarFixer5printEPK23PrePostFloatDollarFixerf(const PrePostFloatDollarFixer*const this, float num)
@@ -308,15 +319,10 @@ char _ZNK23PrePostFloatDollarFixer16getDefaultSymbolEPK23PrePostFloatDollarFixer
 
 /* PrePostChecker Defs */
 
-void *(*VtablePrePostChecker[])(void*) = {(void *(*)(void *)) _ZN14PrePostChecker1DEP14PrePostChecker,
-                                                   (void *(*)(void *)) _ZNK12PrePostFixer5printEPK12PrePostFixerPKc,
-                                                   (void *(*)(void *)) _ZNK16PrePostHashFixer5printEPK16PrePostHashFixerlc,
-                                                   (void *(*)(void *)) _ZNK23PrePostFloatDollarFixer16getDefaultSymbolEPK23PrePostFloatDollarFixer};
-
 void _ZN14PrePostChecker1CEP14PrePostChecker(PrePostChecker* this)
 {
     _ZN23PrePostFloatDollarFixer1CEP23PrePostFloatDollarFixerPKcPKc((PrePostFloatDollarFixer*)this, "[[[[ ", " ]]]]");
-    ((TextFormatter*)this)->pVtable = VtablePrePostChecker;
+    ((TextFormatter*)this)->vPtr = VtablePrePostChecker;
     printf("--- PrePostChecker CTOR: \"%s\"...\"%s\"\n", ((PrePostFixer*)this)->m_pre, ((PrePostFixer*)this)->m_post);
 }
 
@@ -324,14 +330,14 @@ void _ZN14PrePostChecker1DEP14PrePostChecker(void* this)
 {
     PrePostChecker* prePostChecker = (PrePostChecker*)this;
     printf("--- PrePostChecker CTOR: \"%s\"...\"%s\"\n", ((PrePostFixer*)this)->m_pre, ((PrePostFixer*)this)->m_post);
-    ((TextFormatter*)prePostChecker)->pVtable = VtablePrePostDollarFixer;
-    (((TextFormatter*)this)->pVtable[E_Dtor])(this);
+    ((TextFormatter*)prePostChecker)->vPtr = VtablePrePostDollarFixer;
+    (((TextFormatter*)this)->vPtr[E_Dtor])(this);
 }
 
 void _ZNK14PrePostChecker24printThisSymbolUsingFuncEPK14PrePostChecker(const PrePostChecker*const this)
 {
     printf("%-60s | ", "[PrePostChecker::printThisSymbolUsingFunc()]");
-    printf("Default symbol is %c\n", ((getDefaultSymbol)((TextFormatter*)this)->pVtable[3])((void *)this));
+    printf("Default symbol is %c\n", ((getDefaultSymbol)((TextFormatter*)this)->vPtr[3])((void *)this));
 }
 
 void _ZNK14PrePostChecker23printThisSymbolDirectlyEPK14PrePostChecker(const PrePostChecker*const this)
@@ -343,7 +349,7 @@ void _ZNK14PrePostChecker23printThisSymbolDirectlyEPK14PrePostChecker(const PreP
 void _ZNK14PrePostChecker32printDollarSymbolByCastUsingFuncEPK14PrePostChecker(const PrePostChecker*const this)
 {
     printf("%-60s | ", "[PrePostChecker::printDollarSymbolByCastUsingFunc()]");
-    printf("Default symbol is %c\n", ((getDefaultSymbol)((TextFormatter*)this)->pVtable[3])((void *)this));
+    printf("Default symbol is %c\n", ((getDefaultSymbol)((TextFormatter*)this)->vPtr[3])((void *)this));
 }
 
 void _ZNK14PrePostChecker33printDollarSymbolByScopeUsingFuncEPK14PrePostChecker(const PrePostChecker*const this)
@@ -369,18 +375,12 @@ void _ZNK14PrePostChecker32printDollarSymbolByScopeDirectlyEPK14PrePostChecker(c
 
 /* Multiplier Defs */
 
-void *(*VtableMultiplier[])(void*) = {(void *(*)(void *)) _ZN10MultiplierD1EP10Multiplier,
-                                          (void *(*)(void *)) _ZNK10Multiplier5printEP10MultiplierPKc,
-                                          (void *(*)(void *)) _ZNK16PrePostHashFixer5printEPK16PrePostHashFixerlc,
-                                          (void *(*)(void *)) _ZNK23PrePostFloatDollarFixer16getDefaultSymbolEPK23PrePostFloatDollarFixer};
-
-
 void _ZN10MultiplierD1EP10Multiplier(void * this)
 {
     Multiplier* multiplier = (Multiplier*)this;
     printf("--- Multiplier DTOR: times = %d\n", multiplier->times);
-    ((TextFormatter*)multiplier)->pVtable = VtablePrePostDollarFixer;
-    (((TextFormatter*)this)->pVtable[E_Dtor])(this);
+    ((TextFormatter*)multiplier)->vPtr = VtablePrePostDollarFixer;
+    (((TextFormatter*)this)->vPtr[E_Dtor])(this);
 }
 
 void _ZNK10Multiplier5printEP10MultiplierPKc(void* this, const char* text)

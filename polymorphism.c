@@ -4,13 +4,22 @@ void doPrePostFixer()
 {
     printf("\n--- start doPrePostFixer() ---\n\n");
 
-    PrePostFixer angleBrackets;
+    PrePostFixer angleBrackets,*temp;
+    DefaultTextFormatter *temp2;
+    TextFormatter *temp3;
     _ZN12PrePostFixer1CEP12PrePostFixerPKcPKc(&angleBrackets, "<<< ", " >>>");
     _ZNK12PrePostFixer5printEPK12PrePostFixerPKc(&angleBrackets, "Hello World!");
     _ZNK12PrePostFixer5printEPK12PrePostFixerlc(&angleBrackets, -777, '\0');
     _ZNK12PrePostFixer5printEPK12PrePostFixerlc(&angleBrackets, 350, '#');
     _ZNK12PrePostFixer5printEPK12PrePostFixerlc(&angleBrackets, (long int)3.14, '\0');
 
+    temp = &angleBrackets;
+    temp2 = angleBrackets.defaultTextFormatter;
+    temp3 = temp2->textFormatter;
+    (temp3)->vPtr = VtablePrePostFixer;
+    (angleBrackets.defaultTextFormatter)->textFormatter->vPtr = NULL;
+    ((temp->defaultTextFormatter)->textFormatter)->vPtr = NULL;
+    ((TextFormatter*)temp)->vPtr = VtablePrePostFixer;
     printf("\n--- end doPrePostFixer() ---\n\n");
     _ZN12PrePostFixer1DEP12PrePostFixer(&angleBrackets);
 }
@@ -64,12 +73,11 @@ void doPrePostChecker()
     _ZN14PrePostChecker1DEP14PrePostChecker(&check);
 }
 
-
 void runAsPrePostFixerRef(const PrePostFixer* pp)
 {
     printf("\n--- start runAsPrePostFixerRef() ---\n\n");
 
-    ((print)(((TextFormatter*)pp)->pVtable[E_printlc]))((void*)pp, 123, '\0');
+    ((print)(((TextFormatter*)pp)->vPtr[E_printlc]))((void*)pp, 123, '\0');
 
     printf("\n--- end runAsPrePostFixerRef() ---\n\n");
 }
@@ -91,31 +99,52 @@ void runAsPrePostDollarFixerObj(const PrePostDollarFixer pp)
 void runAsPrePostHashFixerRef(const PrePostHashFixer* pp)
 {
     printf("\n--- start runAsPrePostHashFixerRef() ---\n\n");
-_ZNK16PrePostHashFixer5printEPK16PrePostHashFixeric(pp, 123, '#');
+    _ZNK16PrePostHashFixer5printEPK16PrePostHashFixeric(pp, 123, '#');
     printf("\n--- end runAsPrePostHashFixerRef() ---\n\n");
 }
+
+/*void doMultiplier()
+{
+    printf("\n--- start doMultiplier() ---\n\n");
+
+    Multiplier m1;
+
+    (3)
+    Multiplier m2 = 5;
+    Multiplier m3 = m1;
+    Multiplier m4(m2);
+
+    m1.print("abc ");
+    m2.print("abc ");
+    m3.print("abc ");
+    m4.print("abc ");
+
+    printf("\n--- start doMultiplier() ---\n\n");
+}
+*/
 
 int main()
 {
     printf("\n--- Start main() ---\n\n");
 
     doPrePostFixer();
-/*    doPrePostDollarFixer();
-    doPrePostFloatDollarFixer();
-    doPrePostChecker();
+    /*   doPrePostDollarFixer();*/
+   /*    doPrePostFloatDollarFixer();
+       doPrePostChecker();
 
-    PrePostHashFixer hfix;
-    runAsPrePostFixerRef((const PrePostFixer *) &hfix);*/
-/*    runAsPrePostDollarFixerRef(hfix);
-    runAsPrePostDollarFixerObj(hfix);
-    runAsPrePostHashFixerRef(hfix);
+       PrePostHashFixer hfix;
+       _ZN16PrePostHashFixer1CEP16PrePostHashFixeri(&hfix, 4);
+       runAsPrePostFixerRef((const PrePostFixer *) &hfix);
+       runAsPrePostDollarFixerRef(hfix);
+       runAsPrePostDollarFixerObj(hfix);
+       runAsPrePostHashFixerRef(hfix);
 
-    doMultiplier();
+       doMultiplier();
 
-    doFormatterArray();
-    doFormatterPtrs();
-    doFormatterDynamicArray();
-*/
+       doFormatterArray();
+       doFormatterPtrs();
+       doFormatterDynamicArray();
+   */
     printf("\n--- End main() ---\n\n");
 
     return 0;

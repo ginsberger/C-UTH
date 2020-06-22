@@ -2,12 +2,12 @@
 #define UNDERTHEHOODCC_POLYMORPHISM_H
 #include <stdio.h>
 
-extern int m_next_id;
 
+
+typedef  void *(*genericFunctionPointer)(void*);
 typedef void_ptr_function (void *(*)(void *));
 typedef void(*print) (void*,long,char);
 typedef char(*getDefaultSymbol)(void*);
-
 typedef enum E_VIRTUAL_FUNCTION
 {
     E_Dtor,
@@ -17,14 +17,22 @@ typedef enum E_VIRTUAL_FUNCTION
 }E_VIRTUAL_FUNCTION;
 
 
-
+extern int m_next_id;
+extern genericFunctionPointer VtableTextFormatter[];
+extern genericFunctionPointer VtableDefaultTextFormatter[];
+extern genericFunctionPointer VtablePrePostFixer[];
+extern genericFunctionPointer VtablePrePostDollarFixer[];
+extern genericFunctionPointer VtablePrePostHashFixer[];
+extern genericFunctionPointer VtablePrePostFloatDollarFixer[];
+extern genericFunctionPointer VtablePrePostChecker[];
+extern genericFunctionPointer VtableMultiplier[];
 
 
 /* TextFormatter */
 
-typedef struct TextFormatter
+typedef struct
 {
-    void *(**pVtable)(void*);
+    genericFunctionPointer *vPtr;
 }TextFormatter;
 
 void _ZN13TextFormatterC1EP13TextFormatter(TextFormatter* this);
@@ -34,7 +42,7 @@ void _ZN13TextFormatter1DEP13TextFormatter(void* this);
 
 /* DefaultTextFormatter */
 
-typedef struct DefaultTextFormatter
+typedef struct
 {
     TextFormatter* textFormatter;
     int m_id;
@@ -53,7 +61,7 @@ DefaultTextFormatter* _Z22generateFormatterArrayv();
 
 /* PrePostFixer */
 
-typedef struct PrePostFixer
+typedef struct
 {
     DefaultTextFormatter* defaultTextFormatter;
     const char* m_pre;
@@ -72,7 +80,7 @@ char _ZNK12PrePostFixer16getDefaultSymbolEPK12PrePostFixer(const void *const thi
 
 /* PrePostDollarFixer */
 
-typedef struct PrePostDollarFixer
+typedef struct
 {
     PrePostFixer* postFixer;
 }PrePostDollarFixer;
@@ -90,7 +98,7 @@ char _ZNK18PrePostDollarFixer16getDefaultSymbolEPK18PrePostDollarFixer(const voi
 
 /* PrePostHashFixer */
 
-typedef struct PrePostHashFixer
+typedef struct
 {
     PrePostDollarFixer* prePostDollarFixer;
     int precision;
@@ -108,7 +116,7 @@ char _ZNK16PrePostHashFixer16getDefaultSymbolEPK16PrePostHashFixer(const void *c
 
 /* PrePostFloatDollarFixer */
 
-typedef struct PrePostFloatDollarFixer
+typedef struct
 {
     PrePostDollarFixer* prePostDollarFixer;
 }PrePostFloatDollarFixer;
@@ -124,7 +132,7 @@ char _ZNK23PrePostFloatDollarFixer16getDefaultSymbolEPK23PrePostFloatDollarFixer
 
 
 /* PrePostChecker */
-typedef struct PrePostChecker
+typedef struct
 {
     PrePostFloatDollarFixer* prePostFloatDollarFixer;
 }PrePostChecker;
@@ -141,7 +149,7 @@ void _ZNK14PrePostChecker32printDollarSymbolByScopeDirectlyEPK14PrePostChecker(c
 
 
 /* Multiplier */
-typedef struct Multiplier
+typedef struct
 {
     DefaultTextFormatter* defaultTextFormatter;
     int times;
