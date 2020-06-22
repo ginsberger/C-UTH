@@ -4,6 +4,22 @@
 
 extern int m_next_id;
 
+typedef void_ptr_function (void *(*)(void *));
+typedef void(*print) (void*,long,char);
+typedef char(*getDefaultSymbol)(void*);
+
+typedef enum E_VIRTUAL_FUNCTION
+{
+    E_Dtor,
+    E_printPKc,
+    E_printlc,
+    E_getDefaultSymbol
+}E_VIRTUAL_FUNCTION;
+
+
+
+
+
 /* TextFormatter */
 
 typedef struct TextFormatter
@@ -121,6 +137,18 @@ void _ZNK14PrePostChecker32printDollarSymbolByCastUsingFuncEPK14PrePostChecker(c
 void _ZNK14PrePostChecker33printDollarSymbolByScopeUsingFuncEPK14PrePostChecker(const PrePostChecker*const this);
 void _ZNK14PrePostChecker31printDollarSymbolByCastDirectlyEPK14PrePostChecker(const PrePostChecker*const this);
 void _ZNK14PrePostChecker32printDollarSymbolByScopeDirectlyEPK14PrePostChecker(const PrePostChecker*const this);
+
+
+
+/* Multiplier */
+typedef struct Multiplier
+{
+    DefaultTextFormatter* defaultTextFormatter;
+    int times;
+}Multiplier;
+
+void _ZN10MultiplierD1EP10Multiplier(void* this);
+void _ZNK10Multiplier5printEP10MultiplierPKc(void* this, const char* text);
 
 
 

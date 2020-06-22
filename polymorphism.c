@@ -65,19 +65,48 @@ void doPrePostChecker()
 }
 
 
+void runAsPrePostFixerRef(const PrePostFixer* pp)
+{
+    printf("\n--- start runAsPrePostFixerRef() ---\n\n");
+
+    ((print)(((TextFormatter*)pp)->pVtable[E_printlc]))((void*)pp, 123, '\0');
+
+    printf("\n--- end runAsPrePostFixerRef() ---\n\n");
+}
+
+void runAsPrePostDollarFixerRef(const PrePostDollarFixer* pp)
+{
+    printf("\n--- start runAsPrePostDollarFixerRef() ---\n\n");
+    _ZNK18PrePostDollarFixer5printEPK18PrePostDollarFixeric(pp, 123, '$');
+    printf("\n--- end runAsPrePostDollarFixerRef() ---\n\n");
+}
+
+void runAsPrePostDollarFixerObj(const PrePostDollarFixer pp)
+{
+    printf("\n--- start runAsPrePostDollarFixerObj() ---\n\n");
+    _ZNK18PrePostDollarFixer5printEPK18PrePostDollarFixeric(&pp, 123, '$');
+    printf("\n--- end runAsPrePostDollarFixerObj() ---\n\n");
+}
+
+void runAsPrePostHashFixerRef(const PrePostHashFixer* pp)
+{
+    printf("\n--- start runAsPrePostHashFixerRef() ---\n\n");
+_ZNK16PrePostHashFixer5printEPK16PrePostHashFixeric(pp, 123, '#');
+    printf("\n--- end runAsPrePostHashFixerRef() ---\n\n");
+}
 
 int main()
 {
     printf("\n--- Start main() ---\n\n");
 
-/*    doPrePostFixer();
-    doPrePostDollarFixer();
-    doPrePostFloatDollarFixer();*/
+    doPrePostFixer();
+/*    doPrePostDollarFixer();
+    doPrePostFloatDollarFixer();
     doPrePostChecker();
 
-/*    PrePostHashFixer hfix;
-    runAsPrePostFixerRef(hfix);
-    runAsPrePostDollarFixerRef(hfix);
+    PrePostHashFixer hfix;
+    runAsPrePostFixerRef((const PrePostFixer *) &hfix);*/
+/*    runAsPrePostDollarFixerRef(hfix);
     runAsPrePostDollarFixerObj(hfix);
     runAsPrePostHashFixerRef(hfix);
 
