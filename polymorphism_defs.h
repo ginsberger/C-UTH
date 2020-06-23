@@ -5,8 +5,9 @@
 
 
 typedef  void *(*genericFunctionPointer)(void*);
-typedef void_ptr_function (void *(*)(void *));
-typedef void(*print) (void*,long,char);
+typedef void(*Dtor) (void*);
+typedef void(*printlc) (void*,long,char);
+typedef void(*printPKc) (void*, const char*);
 typedef char(*getDefaultSymbol)(void*);
 typedef enum E_VIRTUAL_FUNCTION
 {

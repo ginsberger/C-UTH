@@ -65,8 +65,8 @@ void _ZN20DefaultTextFormatter1CEP20DefaultTextFormatter(DefaultTextFormatter* t
 void _ZN20DefaultTextFormatter1CEP20DefaultTextFormatterPK20DefaultTextFormatter(DefaultTextFormatter* this, const DefaultTextFormatter*const other)
 {
     _ZN13TextFormatterC1EP13TextFormatter((TextFormatter*)this);
-    this->m_id = m_next_id++;
     ((TextFormatter*)this)->vPtr = VtableDefaultTextFormatter;
+    this->m_id = m_next_id++;
     printf("--- DefaultTextFormatter Copy CTOR, from id: %d\n########## C %d ##########\n", other->m_id, this->m_id);
 }
 
@@ -119,10 +119,9 @@ void _ZN12PrePostFixer1CEP12PrePostFixerPKcPKc(PrePostFixer* this, const char* p
 void _ZN12PrePostFixer1CEP12PrePostFixerPK12PrePostFixer(PrePostFixer* this, const PrePostFixer*const other)
 {
     _ZN20DefaultTextFormatter1CEP20DefaultTextFormatterPK20DefaultTextFormatter((DefaultTextFormatter*)this, (DefaultTextFormatter*)other);
-    ((TextFormatter*)this)->vPtr = VtableTextFormatter;
-/*    memcpy(this + sizeof(DefaultTextFormatter), other + sizeof(DefaultTextFormatter), sizeof(PrePostFixer) - sizeof(DefaultTextFormatter));*/
     this->m_post = other->m_post;
     this->m_pre = other->m_pre;
+    ((TextFormatter*)this)->vPtr = VtableTextFormatter;
 }
 
 void _ZN12PrePostFixer1DEP12PrePostFixer(void* this)
@@ -202,7 +201,7 @@ void _ZNK18PrePostDollarFixer5printEPK18PrePostDollarFixeric(const PrePostDollar
 {
     printf("%-60s | ", "[PrePostDollarFixer::print(int, char)]");
     printf("-->\n");
-    ((print)(((TextFormatter*)this)->vPtr[E_printlc]))((void*)this, num, symbol);
+    ((printlc)(((TextFormatter*)this)->vPtr[E_printlc]))((void*)this, num, symbol);
 }
 
 void _ZNK18PrePostDollarFixer5printEPK18PrePostDollarFixerlc(const void *const this, long num, char symbol)
