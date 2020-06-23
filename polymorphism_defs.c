@@ -209,7 +209,21 @@ void _ZNK18PrePostDollarFixer5printEPK18PrePostDollarFixerlc(const void *const t
     PrePostDollarFixer* prePostDollarFixer = (PrePostDollarFixer*)this;
     printf("%-60s | ", "[PrePostDollarFixer::print(long, char)]");
     printf("-->\n");
-    _ZNK12PrePostFixer5printEPK12PrePostFixerlc((PrePostFixer*)this, num, symbol);
+    PrePostFixer* postFixer = (PrePostFixer*)this;
+    printf("%-60s | ", "[PrePostFixer::print(long, char)]");
+    printf("-->\n");
+
+    if (symbol)
+    {
+        printf("%-60s | ", "[PrePostFixer::print_num(long, char)]");
+        printf("%s%c%ld%s\n", postFixer->m_pre, symbol, num, postFixer->m_post);
+    }
+
+    else
+    {
+        printf("%-60s | ", "[PrePostFixer::print_num(long)]");
+        printf("%s%ld%s\n", postFixer->m_pre, num, postFixer->m_post);
+    }
 }
 
 void _ZNK18PrePostDollarFixer5printEPK18PrePostDollarFixerdc(const PrePostDollarFixer*const this, double num, char symbol)
@@ -232,12 +246,12 @@ char _ZNK18PrePostDollarFixer16getDefaultSymbolEPK18PrePostDollarFixer(const voi
 void _ZN16PrePostHashFixer1CEP16PrePostHashFixeri(PrePostHashFixer* this, int prc)
 {
     _ZN18PrePostDollarFixer1CEP18PrePostDollarFixerPKcPKc((PrePostDollarFixer*)this, "===> ", " <===");
-    this->precision = prc;
+    this->m_precision = prc;
     ((TextFormatter*)this)->vPtr = VtablePrePostHashFixer;
-    printf("--- PrePostHashFixer CTOR: \"%s\"...\"%s\", precision: %d\n", ((PrePostFixer*)this)->m_pre, ((PrePostFixer*)this)->m_post, this->precision);
+    printf("--- PrePostHashFixer CTOR: \"%s\"...\"%s\", precision: %d\n", ((PrePostFixer*)this)->m_pre, ((PrePostFixer*)this)->m_post, this->m_precision);
 
     printf("%-60s | ", "[PrePostHashFixer::print(double, char)]");
-    printf("%s[%c%.*f]%s\n", ((PrePostFixer*)this)->m_pre, '$', this->precision, 9999.9999, ((PrePostFixer*)this)->m_post);
+    printf("%s[%c%.*f]%s\n", ((PrePostFixer*)this)->m_pre, '$', this->m_precision, 9999.9999, ((PrePostFixer*)this)->m_post);
 }
 
 void _ZN16PrePostHashFixer1DEP16PrePostHashFixer(void * this)
@@ -254,7 +268,7 @@ void _ZNK16PrePostHashFixer5printEPK16PrePostHashFixeric(const PrePostHashFixer*
     printf("-->\n");
 
     printf("%-60s | ", "[PrePostHashFixer::print(double, char)]");
-    printf("%s[%c%.*f]%s\n", ((PrePostFixer*)this)->m_pre, symbol, this->precision, (double )num, ((PrePostFixer*)this)->m_post);
+    printf("%s[%c%.*f]%s\n", ((PrePostFixer*)this)->m_pre, symbol, this->m_precision, (double )num, ((PrePostFixer*)this)->m_post);
 }
 
 void _ZNK16PrePostHashFixer5printEPK16PrePostHashFixerlc(const void *const this, long num, char symbol)
@@ -265,7 +279,7 @@ void _ZNK16PrePostHashFixer5printEPK16PrePostHashFixerlc(const void *const this,
     printf("-->\n");
 
     printf("%-60s | ", "[PrePostHashFixer::print(double, char)]");
-    printf("%s[%c%.*f]%s\n", ((PrePostFixer*)prePostHashFixer)->m_pre, symbol, prePostHashFixer->precision, (double )num, ((PrePostFixer*)prePostHashFixer)->m_post);
+    printf("%s[%c%.*f]%s\n", ((PrePostFixer*)prePostHashFixer)->m_pre, symbol, prePostHashFixer->m_precision, (double )num, ((PrePostFixer*)prePostHashFixer)->m_post);
 }
 
 char _ZNK16PrePostHashFixer16getDefaultSymbolEPK16PrePostHashFixer(const void *const this)
@@ -354,7 +368,7 @@ void _ZNK14PrePostChecker32printDollarSymbolByCastUsingFuncEPK14PrePostChecker(c
 void _ZNK14PrePostChecker33printDollarSymbolByScopeUsingFuncEPK14PrePostChecker(const PrePostChecker*const this)
 {
     printf("%-60s | ", "[PrePostChecker::printDollarSymbolByScopeUsingFunc()]");
-    printf("Default symbol is %c\n", _ZNK18PrePostDollarFixer16getDefaultSymbolEPK18PrePostDollarFixer(this));
+    printf("Default symbol is %c\n", '$');
 }
 
 void _ZNK14PrePostChecker31printDollarSymbolByCastDirectlyEPK14PrePostChecker(const PrePostChecker*const this)
@@ -377,7 +391,7 @@ void _ZNK14PrePostChecker32printDollarSymbolByScopeDirectlyEPK14PrePostChecker(c
 void _ZN10MultiplierD1EP10Multiplier(void * this)
 {
     Multiplier* multiplier = (Multiplier*)this;
-    printf("--- Multiplier DTOR: times = %d\n", multiplier->times);
+    printf("--- Multiplier DTOR: m_times = %d\n", multiplier->m_times);
     ((TextFormatter*)multiplier)->vPtr = VtablePrePostDollarFixer;
     (((TextFormatter*)this)->vPtr[E_Dtor])(this);
 }
@@ -388,7 +402,7 @@ void _ZNK10Multiplier5printEP10MultiplierPKc(void* this, const char* text)
 
     printf("%-60s | ", "[Multiplier::print(const char*)]");
     int i ;
-    for (i = 0; i < multiplier->times; ++i)
+    for (i = 0; i < multiplier->m_times; ++i)
         printf("%s", text);
     printf("\n");
 }

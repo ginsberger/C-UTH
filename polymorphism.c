@@ -113,19 +113,19 @@ void doMultiplier()
 
     Multiplier m1;
     _ZN20DefaultTextFormatter1CEP20DefaultTextFormatter((DefaultTextFormatter*)&m1);
-    m1.times = 3;
+    m1.m_times = 3;
     ((TextFormatter*)&m1)->vPtr = VtableMultiplier;
-    printf("--- Multiplier CTOR: times = %d\n", m1.times);
+    printf("--- Multiplier CTOR: times = %d\n", m1.m_times);
 
     Multiplier temp;
     _ZN20DefaultTextFormatter1CEP20DefaultTextFormatter((DefaultTextFormatter*)&temp);
-    temp.times = 5;
+    temp.m_times = 5;
     ((TextFormatter*)&m1)->vPtr = VtableMultiplier;
-    printf("--- Multiplier CTOR: times = %d\n", temp.times);
+    printf("--- Multiplier CTOR: times = %d\n", temp.m_times);
     Multiplier m2;
     _ZN20DefaultTextFormatter1CEP20DefaultTextFormatterPK20DefaultTextFormatter((DefaultTextFormatter*)&m2, (DefaultTextFormatter*)&temp);
     ((TextFormatter*)&m2)->vPtr = VtableMultiplier;
-    m2.times = temp.times;
+    m2.m_times = temp.m_times;
 
     Multiplier m3;
     memcpy(&m3, &m1, sizeof(Multiplier));
@@ -133,7 +133,7 @@ void doMultiplier()
     Multiplier m4;
     _ZN20DefaultTextFormatter1CEP20DefaultTextFormatterPK20DefaultTextFormatter((DefaultTextFormatter*)&m4, (DefaultTextFormatter*)&m2);
     ((TextFormatter*)&m4)->vPtr = VtableMultiplier;
-    m4.times = m2.times;
+    m4.m_times = m2.m_times;
 
     _ZNK10Multiplier5printEP10MultiplierPKc(&m1, "abc ");
     _ZNK10Multiplier5printEP10MultiplierPKc(&m2, "abc ");
@@ -162,9 +162,9 @@ void doFormatterArray()
     _ZN18PrePostDollarFixer1DEP18PrePostDollarFixer(&temp1);
 
     _ZN20DefaultTextFormatter1CEP20DefaultTextFormatter((DefaultTextFormatter*)&temp2);
-    temp2.times = 4;
+    temp2.m_times = 4;
     ((TextFormatter*)&temp2)->vPtr = VtableMultiplier;
-    printf("--- Multiplier CTOR: times = %d\n", temp2.times);
+    printf("--- Multiplier CTOR: times = %d\n", temp2.m_times);
     _ZN20DefaultTextFormatter1CEP20DefaultTextFormatterPK20DefaultTextFormatter(&formatters[1], (DefaultTextFormatter*)&temp2);
     _ZN10MultiplierD1EP10Multiplier(&temp2);
 
@@ -195,9 +195,9 @@ void doFormatterPtrs()
 
     pfmt[1] = malloc(sizeof(Multiplier));
     _ZN20DefaultTextFormatter1CEP20DefaultTextFormatter((DefaultTextFormatter*)&pfmt[1]);
-    ((Multiplier*)pfmt[1])->times = 4;
+    ((Multiplier*)pfmt[1])->m_times = 4;
     ((TextFormatter*)&pfmt[1])->vPtr = VtableMultiplier;
-    printf("--- Multiplier CTOR: times = %d\n", ((Multiplier*)pfmt[1])->times);
+    printf("--- Multiplier CTOR: times = %d\n", ((Multiplier*)pfmt[1])->m_times);
 
     pfmt[2] = malloc(sizeof(Multiplier));
     _ZN14PrePostChecker1CEP14PrePostChecker((PrePostChecker *) pfmt[2]);

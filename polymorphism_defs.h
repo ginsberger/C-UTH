@@ -102,7 +102,7 @@ char _ZNK18PrePostDollarFixer16getDefaultSymbolEPK18PrePostDollarFixer(const voi
 typedef struct
 {
     PrePostDollarFixer* prePostDollarFixer;
-    int precision;
+    int m_precision;
 }PrePostHashFixer;
 
 void _ZN16PrePostHashFixer1CEP16PrePostHashFixeri(PrePostHashFixer* prePostHashFixer, int prc);/*prc=4*/
@@ -153,7 +153,7 @@ void _ZNK14PrePostChecker32printDollarSymbolByScopeDirectlyEPK14PrePostChecker(c
 typedef struct
 {
     DefaultTextFormatter* defaultTextFormatter;
-    int times;
+    int m_times;
 }Multiplier;
 
 void _ZN10MultiplierD1EP10Multiplier(void* this);
